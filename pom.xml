@@ -11,6 +11,7 @@
 	<groupId>com.cyr.image</groupId>
 	<artifactId>imagespringboot_crud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<package>war</package>
 	<name>imagespringboot_crud</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
