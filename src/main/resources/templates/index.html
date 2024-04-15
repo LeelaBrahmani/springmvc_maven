@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container my-3">
+		<h1>Products List</h1>
+			<form th:action="@{/index}" method="get">
+			Filter: <input type="text" name="keyword" id="keyword" size="15" th:value="${keyword}" required/>&nbsp;
+			<input type="submit" value="Search"/>&nbsp;
+			<input type="button" value="Clear" id="btnClear" onclick="clearSearch()"/>
+			</form>
+			<script type="text/javascript">
+			function clearSearch(){
+				window.location="[[@{/index}]]";
+			}
+			</script>
+			<br>
+			<a th:href="@{/showNewProductForm}" class="btn btn-primary btn-sm mb-3">Add Product</a><br><br>
+			<table border="1" class="table table-stripped table-responsive-md">
+			
+			<thead>
+			<tr>
+			<th>
+			<a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
+            Id</a>
+             </th>
+				    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=productName&sortDir=' + ${reverseSortDir}}">
+                    Product Name</a></th>
+                    <th><a th:href="@{'/page/' + ${currentPage} + '?sortField=price&sortDir=' + ${reverseSortDir}}">
+                    Product Price</a></th>
+                    <th>Photo</th>
+                     <!--  <th>Image</th>-->
+                    <th> Actions </th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="product: ${listproduct}">
+			<td th:text="${product.id}" ></td>
+			<td th:text="${product.productName}"></td>
+			<td th:text="${product.price}"></td>
+			<td><img th:src="@{${product.PhotosImagePath}}" alt="" width="50"></td>
+			<td> <a th:href="@{/showFormForUpdate/{id}(id=${product.id})}" class="btn btn-primary btn-sm">Update</a>
+                        <a th:href="@{/deleteProduct/{id}(id=${product.id})}" onclick="return confirm('Are You Sure')"class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+			</tr>
+			</tbody>
+			
+	</table>
+	<div th:if = "${totalPages > 1}">
+   <div class = "row col-sm-10">
+    <div class = "col-sm-2">
+     Total Rows: [[${totalItems}]] 
+    </div>
+    <div class = "col-sm-1">
+     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+      <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+      <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+     </span>
+    </div>
+    <div class = "col-sm-1">
+     <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+     <span th:unless="${currentPage < totalPages}">Next</span>
+    </div>
+    
+     <div class="col-sm-1">
+        <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+     <span th:unless="${currentPage < totalPages}">Last</span>
+        </div>
+   </div>
+  </div>
+	</div>
+</body>
+</html>
